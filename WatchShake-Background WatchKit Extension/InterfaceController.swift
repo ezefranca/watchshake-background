@@ -9,12 +9,11 @@
 import WatchKit
 import Foundation
 
-class InterfaceController: WKInterfaceController, WKExtensionDelegate, URLSessionDownloadDelegate {
+class InterfaceController: WKInterfaceController {
     // MARK: Properties
     
-    let sampleDownloadURL = URL(string: "http://devstreaming.apple.com/videos/wwdc/2015/802mpzd3nzovlygpbg/802/802_designing_for_apple_watch.pdf?dl=1")!
-    
-    @IBOutlet var timeDisplayLabel: WKInterfaceLabel!
+    @IBOutlet var shakeDisplayLabel: WKInterfaceLabel!
+    var shaker:WatchShaker = WatchShaker(shakeSensibility: .shakeSensibilityNormal, delay: 0.2)
     
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -34,28 +33,19 @@ class InterfaceController: WKInterfaceController, WKExtensionDelegate, URLSessio
         updateDateLabel()
     }
     
-    // MARK: WKExtensionDelegate
-    func handle(_ backgroundTasks: Set<WKRefreshBackgroundTask>) {
-        for task : WKRefreshBackgroundTask in backgroundTasks {
-            print("received background task: ", task)
-            // only handle these while running in the background
-            if (WKExtension.shared().applicationState == .background) {
-                if task is WKApplicationRefreshBackgroundTask {
-                    // this task is completed below, our app will then suspend while the download session runs
-                    print("application task received, start URL session")
-                    scheduleURLSession()
-                }
-            }
-            else if let urlTask = task as? WKURLSessionRefreshBackgroundTask {
-                let backgroundConfigObject = URLSessionConfiguration.background(withIdentifier: urlTask.sessionIdentifier)
-                let backgroundSession = URLSession(configuration: backgroundConfigObject, delegate: self, delegateQueue: nil)
-                
-                print("Rejoining session ", backgroundSession)
-            }
-            // make sure to complete all tasks, even ones you don't handle
-            task.setTaskCompleted()
-        }
+    override func willActivate() {
+        
+        super.willActivate()
+        shaker.delegate = self
     }
+    
+    override func didDeactivate() {
+        
+        super.didDeactivate()
+        shaker.stop()
+        
+    }
+    
     
     // MARK: Snapshot and UI updating
     
@@ -71,25 +61,9 @@ class InterfaceController: WKInterfaceController, WKExtensionDelegate, URLSessio
     
     func updateDateLabel() {
         let currentDate = Date()
-        timeDisplayLabel.setText(dateFormatter.string(from: currentDate))
+        shakeDisplayLabel.setText(dateFormatter.string(from: currentDate))
     }
     
-    // MARK: URLSession handling
-    
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        print("NSURLSession finished to url: ", location)
-        updateDateLabel()
-        scheduleSnapshot()
-    }
-    
-    func scheduleURLSession() {
-        let backgroundConfigObject = URLSessionConfiguration.background(withIdentifier: NSUUID().uuidString)
-        backgroundConfigObject.sessionSendsLaunchEvents = true
-        let backgroundSession = URLSession(configuration: backgroundConfigObject)
-        
-        let downloadTask = backgroundSession.downloadTask(with: sampleDownloadURL)
-        downloadTask.resume()
-    }
     
     // MARK: IB actions
     
@@ -106,4 +80,41 @@ class InterfaceController: WKInterfaceController, WKExtensionDelegate, URLSessio
         }
     }
     
+}
+
+extension InterfaceController: WKExtensionDelegate {
+    
+    // MARK: WKExtensionDelegate
+    func handle(_ backgroundTasks: Set<WKRefreshBackgroundTask>) {
+        for task : WKRefreshBackgroundTask in backgroundTasks {
+            print("received background task: ", task)
+            print(">>>>> teste funcionou colocar delegate <<<<")
+            if (WKExtension.shared().applicationState == .background) {
+                if task is WKApplicationRefreshBackgroundTask {
+                    // this task is completed below, our app will then suspend while the download session runs
+                    print("application task received, start shake")
+                    shaker.start()
+                }
+            }
+            else if task is WKURLSessionRefreshBackgroundTask {
+                
+                print("Rejoining")
+            }
+            
+            task.setTaskCompleted()
+        }
+    }
+
+    
+}
+
+extension InterfaceController: WatchShakerDelegate
+{
+    func watchShakerDidShake(_ watchShaker: WatchShaker) {
+        print("YOU HAVE SHAKEN YOUR ⌚️⌚️⌚️")
+    }
+    
+    func watchShaker(_ watchShaker: WatchShaker, didFailWith error: Error) {
+        print(error.localizedDescription)
+    }
 }
