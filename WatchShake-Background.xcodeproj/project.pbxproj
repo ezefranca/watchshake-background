@@ -19,6 +19,7 @@
 		8B268A5A1ED2711B00EF17EF /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B268A591ED2711B00EF17EF /* InterfaceController.swift */; };
 		8B268A5C1ED2711B00EF17EF /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B268A5B1ED2711B00EF17EF /* ExtensionDelegate.swift */; };
 		8B268A5E1ED2711B00EF17EF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B268A5D1ED2711B00EF17EF /* Assets.xcassets */; };
+		8B268A6E1ED271A200EF17EF /* WatchShaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B268A6D1ED271A200EF17EF /* WatchShaker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +81,7 @@
 		8B268A5B1ED2711B00EF17EF /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		8B268A5D1ED2711B00EF17EF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8B268A5F1ED2711B00EF17EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8B268A6D1ED271A200EF17EF /* WatchShaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchShaker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +148,7 @@
 		8B268A581ED2711B00EF17EF /* WatchShake-Background WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
+				8B268A6D1ED271A200EF17EF /* WatchShaker.swift */,
 				8B268A591ED2711B00EF17EF /* InterfaceController.swift */,
 				8B268A5B1ED2711B00EF17EF /* ExtensionDelegate.swift */,
 				8B268A5D1ED2711B00EF17EF /* Assets.xcassets */,
@@ -301,6 +304,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B268A6E1ED271A200EF17EF /* WatchShaker.swift in Sources */,
 				8B268A5C1ED2711B00EF17EF /* ExtensionDelegate.swift in Sources */,
 				8B268A5A1ED2711B00EF17EF /* InterfaceController.swift in Sources */,
 			);
